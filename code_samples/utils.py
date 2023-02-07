@@ -20,9 +20,12 @@ def processTokenChunks(channelList):
             licenseUrl = channel['channel_license_url'] + "&ls_session=" + ls_session_key
             try: 
                 if sys.argv[1]=='--ott-navigator':
-                    kodiPropLicenseUrl = "#KODIPROP:inputstream.adaptive.license_key=" + licenseUrl
+                    kodiPropLicenseUrl = f"#KODIPROP:inputstream.adaptive.license_key={licenseUrl}"
             except IndexError:
-                    kodiPropLicenseUrl = "#KODIPROP:inputstream.adaptive.license_key=" + licenseUrl + "|Content-Type=application/octet-stream|R{SSM}|"
+                kodiPropLicenseUrl = (
+                    f"#KODIPROP:inputstream.adaptive.license_key={licenseUrl}"
+                    + "|Content-Type=application/octet-stream|R{SSM}|"
+                )
         else:
             print("Didn't get license for channel: Id: {0} Name:{1}".format(channel['channel_id'],
                                                                             channel['channel_name']))
@@ -55,14 +58,15 @@ def saveM3ustringtofile(m3ustr):
 
 
 def getPrintNote():
-    s = " *****************************************************\n" + "Welcome To TataSky Channel Generation Script\n" + \
-        "**********************************************************\n" + \
-        "- Using this script you can generate playable links based on the channels you have subscribed to \n" + \
-        "- You can always read the README.md file if you don't know how to use the generated file \n" + \
-        "- You can login using your password or generate an OTP. You need to enter both the Registered Mobile Number \n" + \
-        "\n Caution: This doesn't promote any kind of hacking or compromising anyone's details"
-
-    return s
+    return (
+        " *****************************************************\n"
+        + "Welcome To TataSky Channel Generation Script\n"
+        + "**********************************************************\n"
+        + "- Using this script you can generate playable links based on the channels you have subscribed to \n"
+        + "- You can always read the README.md file if you don't know how to use the generated file \n"
+        + "- You can login using your password or generate an OTP. You need to enter both the Registered Mobile Number \n"
+        + "\n Caution: This doesn't promote any kind of hacking or compromising anyone's details"
+    )
 
 
 if __name__ == '__main__':

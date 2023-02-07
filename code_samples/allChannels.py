@@ -9,7 +9,7 @@ channel_list = []
 
 
 def getChannelInfo(channelId):
-    url = "{}content-detail/pub/api/v2/channels/{}".format(API_BASE_URL, channelId)
+    url = f"{API_BASE_URL}content-detail/pub/api/v2/channels/{channelId}"
     x = requests.get(url)
     meta_data= x.json()['data']['meta']
     channel_meta = x.json()['data']['channelMeta']
@@ -35,25 +35,25 @@ def saveChannelsToFile():
 
 def processChnuks(channel_lists):
     for channel in channel_lists:
-        print("Getting channelId:{}".format(channel.get('id', '')))
+        print(f"Getting channelId:{channel.get('id', '')}")
         channel_id = str(channel.get('id', ''))
         getChannelInfo(channel_id)
 
 
 def getAllChannels():
     ts = []
-    url = API_BASE_URL + "content-detail/pub/api/v1/channels?limit=1000"
+    url = f"{API_BASE_URL}content-detail/pub/api/v1/channels?limit=1000"
     x = requests.get(url)
     channel_list = x.json()['data']['list']
     print("Total Channels fetched:", len(channel_list))
     print("Fetching channel info..........")
-    for i in range(0, len(channel_list), 1):
+    for i in range(len(channel_list)):
         t = threading.Thread(target=processChnuks, args=([channel_list[i:i + 1]]))
         ts.append(t)
         t.start()
     for t in ts:
         t.join()
-    print("Saving all to a file.... " + str(len(channel_list)))
+    print(f"Saving all to a file.... {len(channel_list)}")
     saveChannelsToFile()
 
 

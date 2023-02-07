@@ -14,7 +14,7 @@ while True:
     print(s if logged_in != "true" else "")
     print("Credits: Gaurav Thakkar (My Github is: https://github.com/ForceGT)" if logged_in != "true" else "")
     print("====================================")
-    print(" Login Status: " + logged_in)
+    print(f" Login Status: {logged_in}")
     print("====================================")
     print("Menu:")
     print("1. Login using Password" if logged_in != "true" else "1. Login Again Using Password")

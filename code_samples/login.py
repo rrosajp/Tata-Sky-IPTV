@@ -4,7 +4,7 @@ import requests
 import json
 import argparse
 
-url = API_BASE_URL_2 + "rest-api/pub/api/v3/login/ott"
+url = f"{API_BASE_URL_2}rest-api/pub/api/v3/login/ott"
 fallback_rmn = ""
 user = {}
 
@@ -12,7 +12,7 @@ user = {}
 def generateOTP(sid, rmn):
     print("Generating OTP.......")
     print("\n \n \n")
-    otp_with_rmn_url = API_BASE_URL + "rest-api/pub/api/v1/rmn/" + rmn + "/otp"
+    otp_with_rmn_url = f"{API_BASE_URL}rest-api/pub/api/v1/rmn/{rmn}/otp"
     x = requests.get(otp_with_rmn_url)
     if x.status_code == 200:
         msg = x.json()['message']
@@ -95,18 +95,17 @@ def getPayload(auth, sid, loginOpt, rmn):
 
 
 def getHeaders():
-    headers = {
+    return {
         'authority': 'tm.tapi.videoready.tv',
         'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36',
         'content-type': 'application/json',
         'device_details': '{"pl":"web","os":"WINDOWS","lo":"en-us","app":"1.36.09","dn":"PC",'
-                          '"bv":100,"bn":"CHROME","device_id":"a13ce448c87mar1486c369843c30e4331638560148363",'
-                          '"device_type":"WEB","device_platform":"PC","device_category":"open",'
-                          '"manufacturer":"WINDOWS_CHROME_100","model":"PC","sname":""}',
+        '"bv":100,"bn":"CHROME","device_id":"a13ce448c87mar1486c369843c30e4331638560148363",'
+        '"device_type":"WEB","device_platform":"PC","device_category":"open",'
+        '"manufacturer":"WINDOWS_CHROME_100","model":"PC","sname":""}',
         'origin': 'https://watch.tataplay.com',
-        'referer': 'https://watch.tataplay.com/'
+        'referer': 'https://watch.tataplay.com/',
     }
-    return headers
 
 
 def saveUserDetailsToFile():
@@ -116,16 +115,14 @@ def saveUserDetailsToFile():
 
 # This method looks up Subscriber ID from registered mobile number
 def lookupSid(rmn):
-    url = API_BASE_URL + "rest-api/pub/api/v1/subscriberLookup" + "?rmn=" + rmn
+    url = f"{API_BASE_URL}rest-api/pub/api/v1/subscriberLookup?rmn={rmn}"
 
     x = requests.get(url)
     msg = x.json()['code']
     if msg == "We are unable to process your request. Please try again later.":
-        sid = x.json()['data']['sidList'][0]["sid"]
-        return sid
-    else:
-        print("Could not get Subscribed ID.. Message:", msg)
-        exit(0)
+        return x.json()['data']['sidList'][0]["sid"]
+    print("Could not get Subscribed ID.. Message:", msg)
+    exit(0)
 
 
 if __name__ == '__main__':
